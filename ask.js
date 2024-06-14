@@ -1,5 +1,7 @@
 import slugify from "elliotisms/lib/slugify.js"
 import { performance } from "node:perf_hooks"
+import path from "node:path"
+import truncateFilename from "elliotisms/lib/truncate-filename.js"
 export const ask = async (blob, filename) => {
   try {
     const requestOptions = {
@@ -23,7 +25,7 @@ export const ask = async (blob, filename) => {
     )
     const endTime = performance.now()
     process.env.DEBUG_ON &&
-      console.log(`Took ${endTime - startTime} milliseconds`)
+      console.log(`ask for ${truncateFilename(filename)} Took ${endTime - startTime} milliseconds`)
 
     let text = await response.json()
 

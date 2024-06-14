@@ -403,10 +403,10 @@ elliotisms@^0.0.14:
   resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.14.tgz#b87f733a7b1014be0ca08fa357ee2b93d683eb19"
   integrity sha512-NEheJmioYy/dxXW3MzfFLVYpa21sQXxaje8P4xrsbF/WT7cskIPF9gJKgnJ7r4aOpV+QrVB7m1ksJukRB4uH+w==
 
-elliotisms@^0.0.21:
-  version "0.0.21"
-  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.21.tgz#acffd41bb8819a1e5af60bf8d9a61bf656d19183"
-  integrity sha512-ibDzL4JPUsvYvHlMTLQRpDCokrUGry6nAbv1K0bxf5xPzJQUvfm0eR57uqHhAqFNXp83PWRAcIj567n6yOClEg==
+elliotisms@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.22.tgz#83a70c5b99c4761a1eb9c09d58885517fd29dc4c"
+  integrity sha512-qxbCpJKPlZGo/F7/OX9isrQ0BqlAFUKFLKyZn59Vc19GgLUj8l8L3nAWUNHSfYJr2XX4OGiZGAKCOb+9l77dZQ==
   dependencies:
     elliotisms "^0.0.14"
     text-case "^1.0.9"

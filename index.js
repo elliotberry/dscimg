@@ -8,6 +8,26 @@ import { validateAndFormatInput } from "./file-path-argument.js"
 import exists from "elliotisms/lib/exists.js"
 import { fdir } from "fdir"
 
+
+
+
+Promise.batchAll = async (promises, batchSize) => {
+  const results = [];
+  
+  // Helper function to execute a batch of promises
+  async function executeBatch(batch) {
+      const batchResults = await Promise.all(batch);
+      results.push(...batchResults);
+  }
+
+  for (let i = 0; i < promises.length; i += batchSize) {
+      const batch = promises.slice(i, i + batchSize);
+      await executeBatch(batch);
+  }
+
+  return results;
+};
+
 const imageFileTypes = ["jpg", "jpeg", "png", "webp", "gif"]
 
 const argv = yargs(hideBin(process.argv))
@@ -47,14 +67,36 @@ const main = async (input) => {
   })
   let finalLength = inputs.length
   console.log(
-    `Filtered ${initialLength - finalLength} files fora total of ${finalLength} files.`
+    `Filtered ${initialLength - finalLength} files for a total of ${finalLength} files.`
   )
   if (argv.rename) {
-    let fileContents = await Promise.all(
-      inputs.map((file) => fs.readFile(file))
-    )
+    await Promise.batchAll(
+      inputs.map(async (file, index) => {
+        let content = await fs.readFile(file)
+        let filename = await ask(content, inputs[index])
+        let ogfilename = path.basename(
+          inputs[index],
+          path.extname(inputs[index])
+        )
 
-    let results = await Promise.all(fileContents.map(ask))
+        let newFilename = path.join(
+          path.dirname(inputs[index]),
+          `${filename}${path.extname(inputs[index])}`
+        )
+        if (await exists(newFilename)) {
+          console.warn(`File ${newFilename} already exists, skipping`)
+        } else {
+          await fs.rename(inputs[index], newFilename)
+        }
+      })
+    )
+  }
+  /*
+    let results = await Promise.all(
+      fileContents.map(async (f, index) => {
+        return await ask(f, inputs[index])
+      })
+    )
     for (const [index, result] of results.entries()) {
       if (result !== null) {
         let filename = path.basename(inputs[index], path.extname(inputs[index]))
@@ -67,19 +109,19 @@ const main = async (input) => {
             `${result}${path.extname(inputs[index])}`
           )
           if (await exists(newFilename)) {
-            throw new Error(`File ${newFilename} already exists`)
+            console.warn(`File ${newFilename} already exists, skipping`)
           } else {
             await fs.rename(inputs[index], newFilename)
           }
         }
       }
     }
-  }
-  else {
+  } else {
     for (const file of inputs) {
       console.log(path.basename(file))
     }
   }
+    */
 }
 
 main(argv._[0])
