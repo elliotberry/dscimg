@@ -22,7 +22,7 @@ const useFdir = async (
            // console.log("egfegf")
             return await funktion.glob(pattern).crawl(pattern).withPromise()
         } else {
-            console.log("egfegf")
+        
             return await funktion.crawl(pattern).withPromise()
         }
     } catch (error) {
