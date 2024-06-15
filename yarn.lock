@@ -398,17 +398,11 @@ electron-to-chromium@^1.4.796:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.796.tgz#48dd6ff634b7f7df6313bd27aaa713f3af4a2b29"
   integrity sha512-NglN/xprcM+SHD2XCli4oC6bWe6kHoytcyLKCWXmRL854F0qhPhaYgUswUsglnPxYaNQIg2uMY4BvaomIf3kLA==
 
-elliotisms@^0.0.14:
-  version "0.0.14"
-  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.14.tgz#b87f733a7b1014be0ca08fa357ee2b93d683eb19"
-  integrity sha512-NEheJmioYy/dxXW3MzfFLVYpa21sQXxaje8P4xrsbF/WT7cskIPF9gJKgnJ7r4aOpV+QrVB7m1ksJukRB4uH+w==
-
-elliotisms@^0.0.22:
-  version "0.0.22"
-  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.22.tgz#83a70c5b99c4761a1eb9c09d58885517fd29dc4c"
-  integrity sha512-qxbCpJKPlZGo/F7/OX9isrQ0BqlAFUKFLKyZn59Vc19GgLUj8l8L3nAWUNHSfYJr2XX4OGiZGAKCOb+9l77dZQ==
+elliotisms@^0.0.25:
+  version "0.0.25"
+  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.25.tgz#bce3d3b051853f0958f231f7c23aa54a5f5e3dfb"
+  integrity sha512-5KKC2m21+D9fqE0hwCHVra9rQWAk0Xpbg/Zjp0Z5s4Fh80k2j/DUWYemaCyJvhbWX57nTv/6GAXuMs7cmsyIWQ==
   dependencies:
-    elliotisms "^0.0.14"
     text-case "^1.0.9"
 
 emoji-regex@^8.0.0:
@@ -842,6 +836,11 @@ json-stable-stringify-without-jsonify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
+
+junk@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npmjs.org/junk/-/junk-4.0.1.tgz#7ee31f876388c05177fe36529ee714b07b50fbed"
+  integrity sha512-Qush0uP+G8ZScpGMZvHUiRfI0YBWuB3gVBYlI0v0vvOJt5FLicco+IkP0a50LqTTQhmts/m6tP5SWE+USyIvcQ==
 
 keyv@^4.5.4:
   version "4.5.4"

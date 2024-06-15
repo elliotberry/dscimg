@@ -19,23 +19,25 @@ export const ask = async (blob, filename) => {
       redirect: "follow"
     }
     const startTime = performance.now()
-    let response = await fetch(
-      "https://gateway.ai.cloudflare.com/v1/e8308a9ca45585112db0d6f88a2cf0c9/penus/workers-ai/@cf/llava-hf/llava-1.5-7b-hf",
+    const response = await fetch(
+      process.env.CF_ENDPOINT,
       requestOptions
     )
     const endTime = performance.now()
     process.env.DEBUG_ON &&
-      console.log(`ask for ${truncateFilename(filename)} Took ${endTime - startTime} milliseconds`)
+      console.log(`request for ${truncateFilename(filename)} took ${Math.floor(endTime - startTime)}ms`)
 
-    let text = await response.json()
+    const text = await response.json()
 
     if (text.success === false) {
       console.log("error with response", text)
       throw new Error(JSON.stringify(text.errors, null, 2))
     }
-    let content = text.result.description
-
-    return slugify(content)
+    const content = text.result.description
+console.log(`content: ${content}`)
+    let slugged = slugify(content)
+    console.log(`slugged: ${slugged}`)
+    return slugged
   } catch (error) {
     console.log(`error with ask: ${error.toString()}`)
     return null;

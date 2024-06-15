@@ -28,6 +28,7 @@ export default [
       "unicorn/prevent-abbreviations": "warn",
       "unicorn/consistent-function-scoping": "warn",
       "unicorn/no-array-callback-reference": "warn",
+      "unicorn/no-process-exit": "off",
       "perfectionist/sort-imports": "warn",
       "perfectionist/sort-objects": "warn"
     }

@@ -42,8 +42,9 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "elliotisms": "^0.0.22",
+    "elliotisms": "^0.0.25",
     "fdir": "^6.1.1",
+    "junk": "^4.0.1",
     "picomatch": "^4.0.2",
     "yargs": "^17.7.2"
   }

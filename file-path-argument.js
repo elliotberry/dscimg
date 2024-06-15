@@ -85,7 +85,7 @@ export const validateAndFormatInput = async (
     }
 
     const type = await getFilePathType(inputString)
-    process.env.DEBUG_ON && console.log(type)
+   
     if (type === "directory") {
       return await useFdir(inputString, -1, false, false)
     } else if (type === "file") {
