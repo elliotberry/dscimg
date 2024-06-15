@@ -6,27 +6,8 @@ import { hideBin } from "yargs/helpers"
 import { ask } from "./ask.js"
 import { validateAndFormatInput } from "./file-path-argument.js"
 import exists from "elliotisms/lib/exists.js"
-import { fdir } from "fdir"
+import returnSafeFilePath from "elliotisms/lib/return-safe-filePath.js"
 
-
-
-
-Promise.batchAll = async (promises, batchSize) => {
-  const results = [];
-  
-  // Helper function to execute a batch of promises
-  async function executeBatch(batch) {
-      const batchResults = await Promise.all(batch);
-      results.push(...batchResults);
-  }
-
-  for (let i = 0; i < promises.length; i += batchSize) {
-      const batch = promises.slice(i, i + batchSize);
-      await executeBatch(batch);
-  }
-
-  return results;
-};
 
 const imageFileTypes = ["jpg", "jpeg", "png", "webp", "gif"]
 
@@ -70,10 +51,14 @@ const main = async (input) => {
     `Filtered ${initialLength - finalLength} files for a total of ${finalLength} files.`
   )
   if (argv.rename) {
-    await Promise.batchAll(
-      inputs.map(async (file, index) => {
-        let content = await fs.readFile(file)
-        let filename = await ask(content, inputs[index])
+    console.log("Renaming files...")
+    let index = 0
+    for await (const file of inputs) {
+      let content = await fs.readFile(file)
+      let filename = await ask(content, inputs[index])
+      if (filename === null) {
+        console.log(`problem with file ${inputs[index]}`)
+      } else {
         let ogfilename = path.basename(
           inputs[index],
           path.extname(inputs[index])
@@ -83,45 +68,16 @@ const main = async (input) => {
           path.dirname(inputs[index]),
           `${filename}${path.extname(inputs[index])}`
         )
-        if (await exists(newFilename)) {
-          console.warn(`File ${newFilename} already exists, skipping`)
+        let finalFilename = await returnSafeFilePath(newFilename)
+        if (await exists(finalFilename)) {
+          console.warn(`File ${finalFilename} already exists, skipping`)
         } else {
-          await fs.rename(inputs[index], newFilename)
-        }
-      })
-    )
-  }
-  /*
-    let results = await Promise.all(
-      fileContents.map(async (f, index) => {
-        return await ask(f, inputs[index])
-      })
-    )
-    for (const [index, result] of results.entries()) {
-      if (result !== null) {
-        let filename = path.basename(inputs[index], path.extname(inputs[index]))
-        console.log(
-          `${filename}${path.extname(inputs[index])} -> ${result}${path.extname(inputs[index])}`
-        )
-        if (argv.rename) {
-          let newFilename = path.join(
-            path.dirname(inputs[index]),
-            `${result}${path.extname(inputs[index])}`
-          )
-          if (await exists(newFilename)) {
-            console.warn(`File ${newFilename} already exists, skipping`)
-          } else {
-            await fs.rename(inputs[index], newFilename)
-          }
+          await fs.rename(inputs[index], finalFilename)
         }
       }
-    }
-  } else {
-    for (const file of inputs) {
-      console.log(path.basename(file))
+      index++
     }
   }
-    */
 }
 
 main(argv._[0])
