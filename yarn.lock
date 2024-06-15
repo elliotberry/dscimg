@@ -398,10 +398,10 @@ electron-to-chromium@^1.4.796:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.796.tgz#48dd6ff634b7f7df6313bd27aaa713f3af4a2b29"
   integrity sha512-NglN/xprcM+SHD2XCli4oC6bWe6kHoytcyLKCWXmRL854F0qhPhaYgUswUsglnPxYaNQIg2uMY4BvaomIf3kLA==
 
-elliotisms@^0.0.25:
-  version "0.0.25"
-  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.25.tgz#bce3d3b051853f0958f231f7c23aa54a5f5e3dfb"
-  integrity sha512-5KKC2m21+D9fqE0hwCHVra9rQWAk0Xpbg/Zjp0Z5s4Fh80k2j/DUWYemaCyJvhbWX57nTv/6GAXuMs7cmsyIWQ==
+elliotisms@^0.0.26:
+  version "0.0.26"
+  resolved "https://registry.npmjs.org/elliotisms/-/elliotisms-0.0.26.tgz#f351acb2e9a5228eba3561d887c7195a2792a726"
+  integrity sha512-4qr0ZF+PXOAjd4ozsr9cAU1HgyoUWtg6RahXyl0WV5pDH3YKTxn8+C7T8ydQmkRPSK7qe3L9oqy8i1l1ad5Qqg==
   dependencies:
     text-case "^1.0.9"
 

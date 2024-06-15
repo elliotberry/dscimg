@@ -67,8 +67,8 @@ const main = async (input) => {
       } else {
         await fs.rename(inputs[index], finalFilename)
         console.log(
-          `Renamed ${truncateFilename(inputs[index])} to ${truncateFilename(
-            finalFilename
+          `Renamed ${truncateFilename(path.basename(inputs[index]))} to ${truncateFilename(
+            path.basename(finalFilename)
           )}`
         )
       }

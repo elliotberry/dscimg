@@ -34,9 +34,9 @@ export const ask = async (blob, filename) => {
       throw new Error(JSON.stringify(text.errors, null, 2))
     }
     const content = text.result.description
-console.log(`content: ${content}`)
+
     let slugged = slugify(content)
-    console.log(`slugged: ${slugged}`)
+ 
     return slugged
   } catch (error) {
     console.log(`error with ask: ${error.toString()}`)
