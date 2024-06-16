@@ -29,13 +29,11 @@ const argv = yargs(hideBin(process.argv))
 
 const main = async (input) => {
   if (!process.env.CF_ENDPOINT || !process.env.CF_AI_TOKEN) {
-    console.error(
-      "Please set the CF_ENDPOINT and CF_AI_TOKEN environment variables."
-    )
+    console.error("Please set the CF_ENDPOINT and CF_AI_TOKEN environment variables.")
     process.exit(1)
   }
   process.env.DEBUG_ON = argv.debug === true ? true : false
- 
+
   let inputs = await validateAndFormatInput(input)
   console.log(inputs)
   const initialLength = inputs.length
@@ -44,9 +42,7 @@ const main = async (input) => {
 
   const finalLength = filteredInputs.length
   let filteredAmount = initialLength - filteredInputs.length
-  filteredAmount > 0 && console.log(
-    `Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`
-  )
+  filteredAmount > 0 && console.log(`Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`)
   if (!argv.rename) {
     return
   }
@@ -58,30 +54,22 @@ const main = async (input) => {
       const content = await getContent(file)
 
       const { filename, time } = await ask(content, file)
-   
-        const newFilename = path.join(
-          path.dirname(file),
-          `${filename}${path.extname(file)}`
+
+      const newFilename = path.join(path.dirname(file), `${filename}${path.extname(file)}`)
+      const finalFilename = await returnSafeFilePath(newFilename)
+      if (await exists(finalFilename)) {
+        console.warn(`File ${finalFilename} already exists, skipping`)
+      } else {
+        await fs.rename(file, finalFilename)
+        console.log(
+          chalk.green(`Renamed ${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`)
         )
-        const finalFilename = await returnSafeFilePath(newFilename)
-        if (await exists(finalFilename)) {
-          console.warn(`File ${finalFilename} already exists, skipping`)
-        } else {
-          await fs.rename(file, finalFilename)
-          console.log(chalk.green(
-            `Renamed ${truncateFilename(path.basename(file))} to ${
-              path.basename(finalFilename)
-            } (${time})`
-          ))
-        }
-      
-      
+      }
     } catch (error) {
       console.error(chalk.red(`Error renaming file: ${error.toString()}`))
     }
     index++
   }
-  
 }
 
 main(argv._[0])
