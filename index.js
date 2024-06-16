@@ -14,15 +14,11 @@ import filterInputs from "./lib/filters.js"
 import getContent from "./lib/get-content.js"
 
 const argv = yargs(hideBin(process.argv))
-  .option("debug", {
+ 
+  .option("dryrun", {
     alias: "d",
-    description: "Enable debug mode",
-    type: "boolean"
-  })
-  .option("rename", {
-    alias: "r",
     default: false,
-    description: "Enable rename mode",
+    description: "Dry run: get new filenames, but don't rename files",
     type: "boolean"
   })
   .help().argv
@@ -32,10 +28,10 @@ const main = async (input) => {
     console.error("Please set the CF_ENDPOINT and CF_AI_TOKEN environment variables.")
     process.exit(1)
   }
-  process.env.DEBUG_ON = argv.debug === true ? true : false
+
 
   let inputs = await validateAndFormatInput(input)
-  console.log(inputs)
+
   const initialLength = inputs.length
 
   let filteredInputs = await filterInputs(inputs)
@@ -43,10 +39,8 @@ const main = async (input) => {
   const finalLength = filteredInputs.length
   let filteredAmount = initialLength - filteredInputs.length
   filteredAmount > 0 && console.log(`Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`)
-  if (!argv.rename) {
-    return
-  }
-  console.log("Renaming files...")
+  
+  argv.dryrun ? console.log("Querying API for new names...") : console.log("Renaming files...")
   let index = 0
 
   for await (const file of filteredInputs) {
@@ -58,15 +52,15 @@ const main = async (input) => {
       const newFilename = path.join(path.dirname(file), `${filename}${path.extname(file)}`)
       const finalFilename = await returnSafeFilePath(newFilename)
       if (await exists(finalFilename)) {
-        console.warn(`File ${finalFilename} already exists, skipping`)
+        console.warn(chalk.red(`File ${finalFilename} already exists, and we screwed up renaming it, skipping`))
       } else {
-        await fs.rename(file, finalFilename)
+        !argv.dryrun && await fs.rename(file, finalFilename)
         console.log(
-          chalk.green(`Renamed ${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`)
+          chalk.green(`${argv.dryrun ? "This would rename " : "Renamed "}${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`)
         )
       }
     } catch (error) {
-      console.error(chalk.red(`Error renaming file: ${error.toString()}`))
+      console.error(chalk.red(`Error processing file: ${error.toString()}`))
     }
     index++
   }
