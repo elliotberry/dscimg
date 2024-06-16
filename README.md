@@ -1,8 +1,15 @@
 # dscimg
+![](https://img.shields.io/npm/v/dscimg?style=flat-square&label=version
+)
 
 > CLI program that uses takes in image filepaths, and uses Cloudflare Workers AI to rename them to a natural-language description.
 
 ![](./logo.png)
+
+### Context
+
+I am a simple man. I right click, save as, and then I keep `23nr129fn1u49fn1_BIG.jpeg` on my desktop forever, afraid of what it may contain. Today, using cutting-edge technology, we can ask a robot what images we downloaded, and it will respond with a wholly incorrect answer.
+
 ## Installation
 Requires two environment variables:
 
@@ -13,7 +20,7 @@ Requires two environment variables:
 ```sh
 dscimg "/home/dad/Pictures/unknown-pictures"
 ```
-Takes in folders, files, and probably globs. Filters out the non-images. Will (probably) not overwrite your files.
+Takes in folders, files, and probably globs. Filters out the non-images. Will (probably) not overwrite your files. But, if you're scared, pass it the `-d` (dry run) arg.
 
 ## Money, money, money
 [Cloudflare Workers does its pricing in "Neurons" to make it more of a pain in the ass to understand. ](https://developers.cloudflare.com/workers-ai/platform/pricing)My back-of-the-napkin math indicates that each request to `llava-hf/llava-1.5-7b-hf` is about .32 neurons. So, in theory, you get 31,250 requests per day. Cool.
