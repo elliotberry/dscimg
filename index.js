@@ -1,14 +1,17 @@
 import "dotenv/config"
 import exists from "elliotisms/lib/exists.js"
 import returnSafeFilePath from "elliotisms/lib/return-safe-filePath.js"
+import truncateFilename from "elliotisms/lib/truncate-filename.js"
 import fs from "node:fs/promises"
 import path from "node:path"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-import truncateFilename from "elliotisms/lib/truncate-filename.js"
-import { ask } from "./ask.js"
-import { validateAndFormatInput } from "./file-path-argument.js"
+
+import { ask } from "./lib/ask.js"
+import { validateAndFormatInput } from "./lib/file-path-argument.js"
 import filterInputs from "./lib/filters.js"
+import getContent from "./lib/get-content.js"
+
 const argv = yargs(hideBin(process.argv))
   .option("debug", {
     alias: "d",
@@ -34,8 +37,9 @@ const main = async (input) => {
 
   let inputs = await validateAndFormatInput(input)
   const initialLength = inputs.length
- 
+ console.log(inputs)
   let filteredInputs = await filterInputs(inputs)
+console.log(filteredInputs)
 
   const finalLength = filteredInputs.length
   console.log(
@@ -46,16 +50,15 @@ const main = async (input) => {
   }
   console.log("Renaming files...")
   let index = 0
-  for await (const file of inputs) {
-    const content = await fs.readFile(file)
+ 
+  for await (const file of filteredInputs) {
+
+    const content = await getContent(file)
+   
     const filename = await ask(content, inputs[index])
     if (filename === null) {
       console.log(`problem with file ${inputs[index]}`)
     } else {
-      const ogfilename = path.basename(
-        inputs[index],
-        path.extname(inputs[index])
-      )
 
       const newFilename = path.join(
         path.dirname(inputs[index]),
@@ -75,6 +78,7 @@ const main = async (input) => {
     }
     index++
   }
+    
 }
 
 main(argv._[0])
