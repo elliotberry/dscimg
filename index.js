@@ -1,3 +1,4 @@
+import chalk from "chalk"
 import "dotenv/config"
 import exists from "elliotisms/lib/exists.js"
 import returnSafeFilePath from "elliotisms/lib/return-safe-filePath.js"
@@ -33,52 +34,54 @@ const main = async (input) => {
     )
     process.exit(1)
   }
-  process.env.DEBUG_ON = argv.debug === true ? true : false;
-
+  process.env.DEBUG_ON = argv.debug === true ? true : false
+ 
   let inputs = await validateAndFormatInput(input)
+  console.log(inputs)
   const initialLength = inputs.length
- console.log(inputs)
+
   let filteredInputs = await filterInputs(inputs)
-console.log(filteredInputs)
 
   const finalLength = filteredInputs.length
-  console.log(
-    `Filtered ${initialLength - finalLength} files for a total of ${finalLength} files.`
+  let filteredAmount = initialLength - filteredInputs.length
+  filteredAmount > 0 && console.log(
+    `Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`
   )
   if (!argv.rename) {
     return
   }
   console.log("Renaming files...")
   let index = 0
- 
+
   for await (const file of filteredInputs) {
+    try {
+      const content = await getContent(file)
 
-    const content = await getContent(file)
+      const { filename, time } = await ask(content, file)
    
-    const filename = await ask(content, inputs[index])
-    if (filename === null) {
-      console.log(`problem with file ${inputs[index]}`)
-    } else {
-
-      const newFilename = path.join(
-        path.dirname(inputs[index]),
-        `${filename}${path.extname(inputs[index])}`
-      )
-      const finalFilename = await returnSafeFilePath(newFilename)
-      if (await exists(finalFilename)) {
-        console.warn(`File ${finalFilename} already exists, skipping`)
-      } else {
-        await fs.rename(inputs[index], finalFilename)
-        console.log(
-          `Renamed ${truncateFilename(path.basename(inputs[index]))} to ${truncateFilename(
-            path.basename(finalFilename)
-          )}`
+        const newFilename = path.join(
+          path.dirname(file),
+          `${filename}${path.extname(file)}`
         )
-      }
+        const finalFilename = await returnSafeFilePath(newFilename)
+        if (await exists(finalFilename)) {
+          console.warn(`File ${finalFilename} already exists, skipping`)
+        } else {
+          await fs.rename(file, finalFilename)
+          console.log(chalk.green(
+            `Renamed ${truncateFilename(path.basename(file))} to ${
+              path.basename(finalFilename)
+            } (${time})`
+          ))
+        }
+      
+      
+    } catch (error) {
+      console.error(chalk.red(`Error renaming file: ${error.toString()}`))
     }
     index++
   }
-    
+  
 }
 
 main(argv._[0])

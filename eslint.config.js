@@ -1,4 +1,3 @@
-
 import perfectionistNatural from "eslint-plugin-perfectionist/configs/recommended-natural"
 import is from "eslint-plugin-simple-import-sort"
 import eslintPluginUnicorn from "eslint-plugin-unicorn"
@@ -14,7 +13,6 @@ export default [
       sourceType: "module"
     },
     plugins: {
-
       "simple-import-sort": is
     },
 
@@ -29,8 +27,23 @@ export default [
       "unicorn/consistent-function-scoping": "warn",
       "unicorn/no-array-callback-reference": "warn",
       "unicorn/no-process-exit": "off",
+      "perfectionist/sort-array-includes": "warn",
+      "perfectionist/sort-astro-attributes": "warn",
+      "perfectionist/sort-classes": "warn",
+      "perfectionist/sort-enums": "warn",
+      "perfectionist/sort-exports": "warn",
       "perfectionist/sort-imports": "warn",
-      "perfectionist/sort-objects": "warn"
+      "perfectionist/sort-interfaces": "warn",
+      "perfectionist/sort-jsx-props": "warn",
+      "perfectionist/sort-maps": "warn",
+      "perfectionist/sort-named-exports": "warn",
+      "perfectionist/sort-named-imports": "warn",
+      "perfectionist/sort-object-types": "warn",
+      "perfectionist/sort-objects": "warn",
+      "perfectionist/sort-svelte-attributes": "warn",
+      "perfectionist/sort-intersection-types": "warn",
+      "perfectionist/sort-union-types": "warn",
+      "perfectionist/sort-vue-attribute": "warn"
     }
   }
 ]
