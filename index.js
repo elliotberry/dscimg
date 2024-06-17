@@ -14,7 +14,7 @@ import filterInputs from "./lib/filters.js"
 import getContent from "./lib/get-content.js"
 
 const argv = yargs(hideBin(process.argv))
- 
+
   .option("dryrun", {
     alias: "d",
     default: false,
