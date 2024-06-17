@@ -78,5 +78,5 @@ const main = async (input) => {
         index++
     }
 }
-console.log(argv)
+
 main(argv._[0])
