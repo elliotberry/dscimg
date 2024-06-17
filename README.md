@@ -4,7 +4,7 @@
 
 > CLI program that uses takes in image filepaths, and uses Cloudflare Workers AI to rename them to a natural-language description.
 
-![](./logo.png)
+![](./logo.jpg)
 
 ### Context
 
