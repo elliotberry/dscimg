@@ -30,17 +30,21 @@ const main = async (input) => {
   }
 
 
-  let inputs = await validateAndFormatInput(input)
+  const inputs = await validateAndFormatInput(input)
 
   const initialLength = inputs.length
 
-  let filteredInputs = await filterInputs(inputs)
+  const filteredInputs = await filterInputs(inputs)
 
   const finalLength = filteredInputs.length
-  let filteredAmount = initialLength - filteredInputs.length
+  const filteredAmount = initialLength - filteredInputs.length
   filteredAmount > 0 && console.log(`Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`)
   
-  argv.dryrun ? console.log("Querying API for new names...") : console.log("Renaming files...")
+  if (argv.dryrun) {
+    console.log("Querying API for new names...");
+  } else {
+    console.log("Renaming files...");
+  }
   let index = 0
 
   for await (const file of filteredInputs) {
