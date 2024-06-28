@@ -1,5 +1,4 @@
 import chalk from "chalk"
-
 import exists from "elliotisms/lib/exists.js"
 import returnSafeFilePath from "elliotisms/lib/return-safe-filePath.js"
 import truncateFilename from "elliotisms/lib/truncate-filename.js"
@@ -7,15 +6,14 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
+
 import config from "./config.js"
 import { ask } from "./lib/ask.js"
 import { validateAndFormatInput } from "./lib/file-path-argument.js"
 import filterInputs from "./lib/filters.js"
 import getContent from "./lib/get-content.js"
 
-
-
-const main = async (input, dryrun=false) => {
+const main = async (input, dryrun = false) => {
     if (!input) {
         throw new Error("No input files selected")
     }
@@ -68,11 +66,8 @@ const main = async (input, dryrun=false) => {
         } catch (error) {
             console.error(chalk.red(`${error.toString()}`))
         }
-        index++
     }
 }
-
-
 
 yargs(hideBin(process.argv))
     .scriptName("dscimg")
@@ -83,17 +78,17 @@ yargs(hideBin(process.argv))
         (yargs) => {
             yargs
                 .positional("path", {
+                    demandOption: true,
                     describe: "Path to process",
                     type: "string",
-                    demandOption: true,
                 })
                 .option("dryrun", {
-                    type: "boolean",
-                    describe: "Run the command in dry run mode",
                     default: false,
+                    describe: "Run the command in dry run mode",
+                    type: "boolean",
                 })
         },
-        async(argv) => {
+        async (argv) => {
             await main(argv.path, argv.dryrun)
         }
     )
@@ -103,10 +98,9 @@ yargs(hideBin(process.argv))
         (yargs) => {
             // Configure options specific to the config command here, if any
         },
-        async (argv) => {
-           
+        async () => {
             console.log("Running config command...")
-            await config.askAll();
+            await config.askAll()
         }
     )
     .help("h")
