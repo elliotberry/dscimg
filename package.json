@@ -11,7 +11,8 @@
         "test": "node index.js ./test.jpg"
     },
     "devDependencies": {
-        "prettier": "^3.3.2"
+        "prettier": "^3.3.2",
+        "@eslint/js": "^9.5.0"
     },
     "prettier": {
         "arrowParens": "always",
@@ -36,8 +37,8 @@
         "embeddedLanguageFormatting": "auto"
     },
     "dependencies": {
-        "@eslint/js": "^9.5.0",
         "chalk": "^5.3.0",
+        "configuration-station": "^0.0.3",
         "dotenv": "^16.4.5",
         "elliotisms": "^0.0.27",
         "fdir": "^6.1.1",

@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import "dotenv/config"
+
 import exists from "elliotisms/lib/exists.js"
 import returnSafeFilePath from "elliotisms/lib/return-safe-filePath.js"
 import truncateFilename from "elliotisms/lib/truncate-filename.js"
@@ -7,30 +7,23 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-
+import config from "./config.js"
 import { ask } from "./lib/ask.js"
 import { validateAndFormatInput } from "./lib/file-path-argument.js"
 import filterInputs from "./lib/filters.js"
 import getContent from "./lib/get-content.js"
 
-const argv = yargs(hideBin(process.argv))
-    .option("dryrun", {
-        alias: "d",
-        default: false,
-        description: "Dry run: get new filenames, but don't rename files",
-        type: "boolean",
-    })
 
-    .help().argv
 
-const main = async (input) => {
-    if (!process.env.CF_ENDPOINT || !process.env.CF_AI_TOKEN) {
-        console.error("Please set the CF_ENDPOINT and CF_AI_TOKEN environment variables, or else, shit, we've got nothing to query.")
-        process.exit(1)
+const main = async (input, dryrun=false) => {
+    if (!input) {
+        throw new Error("No input files selected")
     }
 
     const inputs = await validateAndFormatInput(input)
-
+    if (input.length === 0) {
+        throw new Error("no valid inputs")
+    }
     const initialLength = inputs.length
 
     const filteredInputs = await filterInputs(inputs)
@@ -40,7 +33,7 @@ const main = async (input) => {
     filteredAmount > 0 &&
         console.log(`Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`)
 
-    if (argv.dryrun) {
+    if (dryrun) {
         console.log("Querying API for new names...")
     } else {
         console.log("Renaming files...")
@@ -64,19 +57,58 @@ const main = async (input) => {
                 )
             } else {
                 //simply rename
-                !argv.dryrun && (await fs.rename(file, finalFilename))
+                !dryrun && (await fs.rename(file, finalFilename))
 
                 console.log(
                     chalk.green(
-                        `${argv.dryrun === true ? "This would rename " : "Renamed "}${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`
+                        `${dryrun === true ? "This would rename " : "Renamed "}${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`
                     )
                 )
             }
         } catch (error) {
-            console.error(chalk.red(`Error processing file: ${error.toString()}`))
+            console.error(chalk.red(`${error.toString()}`))
         }
         index++
     }
 }
 
-main(argv._[0])
+
+
+yargs(hideBin(process.argv))
+    .scriptName("dscimg")
+    .usage("$0 <cmd> [args]")
+    .command(
+        "$0 <path>",
+        "Default command with path of images to process",
+        (yargs) => {
+            yargs
+                .positional("path", {
+                    describe: "Path to process",
+                    type: "string",
+                    demandOption: true,
+                })
+                .option("dryrun", {
+                    type: "boolean",
+                    describe: "Run the command in dry run mode",
+                    default: false,
+                })
+        },
+        async(argv) => {
+            await main(argv.path, argv.dryrun)
+        }
+    )
+    .command(
+        "config",
+        "Run the configuration command",
+        (yargs) => {
+            // Configure options specific to the config command here, if any
+        },
+        async (argv) => {
+           
+            console.log("Running config command...")
+            await config.askAll();
+        }
+    )
+    .help("h")
+    .alias("h", "help")
+    .alias("v", "version").argv
