@@ -11,8 +11,9 @@
         "test": "node index.js ./test.jpg"
     },
     "devDependencies": {
+        "@eslint/js": "^9.5.0",
         "prettier": "^3.3.2",
-        "@eslint/js": "^9.5.0"
+        "release-it": "^17.4.0"
     },
     "prettier": {
         "arrowParens": "always",
@@ -43,7 +44,7 @@
         "elliotisms": "^0.0.27",
         "fdir": "^6.1.1",
         "junk": "^4.0.1",
-        "picomatch": "^4.0.2",
+        "picomatch": "^3.x",
         "sharp": "^0.33.4",
         "yargs": "^17.7.2"
     }
