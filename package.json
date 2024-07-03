@@ -53,5 +53,8 @@
         "picomatch": "^3.x",
         "sharp": "^0.33.4",
         "yargs": "^17.7.2"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
     }
 }
