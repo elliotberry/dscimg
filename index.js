@@ -34,6 +34,10 @@ const main = async (input, dryrun = false) => {
     if (dryrun) {
         console.log("Querying API for new names...")
     } else {
+        if (finalLength === 0) {
+            console.log("No files to rename.")
+            return
+        }
         console.log("Renaming files...")
     }
     let index = 0
