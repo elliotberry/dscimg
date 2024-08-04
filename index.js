@@ -19,17 +19,18 @@ const main = async (input, dryrun = false) => {
     }
 
     const inputs = await validateAndFormatInput(input)
-    if (input.length === 0) {
-        throw new Error("no valid inputs")
+    if (inputs.length === 0) {
+        throw new Error("No valid inputs")
     }
     const initialLength = inputs.length
 
     const filteredInputs = await filterInputs(inputs)
 
     const finalLength = filteredInputs.length
-    const filteredAmount = initialLength - filteredInputs.length
-    filteredAmount > 0 &&
+    const filteredAmount = initialLength - finalLength
+    if (filteredAmount > 0) {
         console.log(`Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`)
+    }
 
     if (dryrun) {
         console.log("Querying API for new names...")
@@ -40,35 +41,30 @@ const main = async (input, dryrun = false) => {
         }
         console.log("Renaming files...")
     }
-    let index = 0
 
-    for await (const file of filteredInputs) {
+    for (const file of filteredInputs) {
         try {
             const content = await getContent(file)
-
             const { filename, time } = await ask(content, file)
 
             const newFilename = path.join(path.dirname(file), `${filename}${path.extname(file)}`)
             const finalFilename = await returnSafeFilePath(newFilename)
+
             if (await exists(finalFilename)) {
-                //normally wouldn't happen, but just to be safe.
-                console.warn(
-                    chalk.red(
-                        `File ${finalFilename} already exists, and we screwed up renaming it, skipping`
-                    )
-                )
+                console.warn(chalk.red(`File ${finalFilename} already exists, skipping`))
             } else {
-                //simply rename
-                !dryrun && (await fs.rename(file, finalFilename))
+                if (!dryrun) {
+                    await fs.rename(file, finalFilename)
+                }
 
                 console.log(
                     chalk.green(
-                        `${dryrun === true ? "This would rename " : "Renamed "}${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`
+                        `${dryrun ? "This would rename" : "Renamed"} ${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`
                     )
                 )
             }
         } catch (error) {
-            console.error(chalk.red(`${error.toString()}`))
+            console.error(chalk.red(error.toString()))
         }
     }
 }
@@ -99,9 +95,7 @@ yargs(hideBin(process.argv))
     .command(
         "config",
         "Run the configuration command",
-        (yargs) => {
-            // Configure options specific to the config command here, if any
-        },
+        () => {},
         async () => {
             console.log("Running config command...")
             await config.askAll()
