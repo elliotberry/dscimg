@@ -5,7 +5,7 @@
     "license": "The Unlicense",
     "main": "index.js",
     "bin": "./index.js",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "type": "module",
     "scripts": {
         "test": "node index.js ./test.jpg"
@@ -57,5 +57,5 @@
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org"
-      }
+    }
 }
