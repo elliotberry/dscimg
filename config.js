@@ -1,4 +1,4 @@
-import ConfigurationStation from "configuration-station";
+import ConfigurationStation from "configuration-station"
 const config = new ConfigurationStation({
     appName: "dscimg",
     config: {
