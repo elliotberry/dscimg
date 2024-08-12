@@ -1,4 +1,4 @@
-import ConfigurationStation from "/Users/eberry/projects/configuration-station/index.js"
+import ConfigurationStation from "configuration-station";
 const config = new ConfigurationStation({
     appName: "dscimg",
     config: {
