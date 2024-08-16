@@ -6,14 +6,15 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-
+import addExifTags from "./lib/exif.js"
 import config from "./config.js"
 import { ask } from "./lib/ask.js"
 import { validateAndFormatInput } from "./lib/file-path-argument.js"
 import filterInputs from "./lib/filters.js"
 import getContent from "./lib/get-content.js"
+import ocr from "./lib/tesseract.js"
 
-const main = async (input, dryrun = false) => {
+const main = async (input, dryrun = false, useXMP = true, useOCR = true) => {
     if (!input) {
         throw new Error("No input files selected")
     }
@@ -45,7 +46,7 @@ const main = async (input, dryrun = false) => {
     for (const file of filteredInputs) {
         try {
             const content = await getContent(file)
-            const { filename, time } = await ask(content, file)
+            const { filename, time, prompt, result } = await ask(content, file)
 
             const newFilename = path.join(path.dirname(file), `${filename}${path.extname(file)}`)
             const finalFilename = await returnSafeFilePath(newFilename)
@@ -56,7 +57,20 @@ const main = async (input, dryrun = false) => {
                 if (!dryrun) {
                     await fs.rename(file, finalFilename)
                 }
+                if (useXMP) {
+                    let exifData = {
+                        "DscImg_Prompt": prompt,
+                        "DscImg_ContentDescription": result,
+                        "DscImg_InferenceTime": time,
+                        "DscImg_OriginalFilename": path.basename(file),
+                    }
+                    if (useOCR) {
+                        let text = await ocr(finalFilename)
+                        exifData["DscImg_Tesseract_OCR_Result"] = text
+                    }
 
+                    await addExifTags(exifData, finalFilename)
+                }
                 console.log(
                     chalk.green(
                         `${dryrun ? "This would rename" : "Renamed"} ${truncateFilename(path.basename(file))} to ${path.basename(finalFilename)} (${time})`
@@ -64,7 +78,7 @@ const main = async (input, dryrun = false) => {
                 )
             }
         } catch (error) {
-            console.error(chalk.red(error.toString()))
+            console.error(chalk.red(error.toString(), error.stack))
         }
     }
 }
@@ -87,9 +101,21 @@ yargs(hideBin(process.argv))
                     describe: "Run the command in dry run mode",
                     type: "boolean",
                 })
+                .option("exif", {
+                    alias: "e",
+                    default: true,
+                    describe: "Save debug info as XMP metadata",
+                    type: "boolean",
+                })
+                .option("ocr", {
+                    alias: "o",
+                    default: true,
+                    describe: "Run OCR on images and save result as XMP metadata",
+                    type: "boolean",
+                })
         },
         async (argv) => {
-            await main(argv.path, argv.dryrun)
+            await main(argv.path, argv.dryrun, argv.exif, argv.ocr)
         }
     )
     .command(
