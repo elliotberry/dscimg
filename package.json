@@ -48,7 +48,7 @@
         "chalk": "^5.3.0",
         "configuration-station": "^0.0.7",
         "dotenv": "^16.4.5",
-        "elliotisms": "^0.0.39",
+        "elliotisms": "^0.0.40",
         "fdir": "^6.2.0",
         "junk": "^4.0.1",
         "node-tesseract-ocr": "^2.2.1",
