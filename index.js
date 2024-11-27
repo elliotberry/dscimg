@@ -32,6 +32,9 @@ const main = async (input, dryrun = false, useXMP = true, useOCR = true) => {
     if (filteredAmount > 0) {
         console.log(`Filtered ${filteredAmount} non-img files for a total of ${finalLength} files.`)
     }
+    else {
+        console.log(`Found ${finalLength} files to rename.`)
+    }
 
     if (dryrun) {
         console.log("Querying API for new names...")
@@ -58,15 +61,15 @@ const main = async (input, dryrun = false, useXMP = true, useOCR = true) => {
                     await fs.rename(file, finalFilename)
                 }
                 if (useXMP) {
-                    let exifData = {
+                    const exifData = {
                         "DscImg_Prompt": prompt,
                         "DscImg_ContentDescription": result,
                         "DscImg_InferenceTime": time,
                         "DscImg_OriginalFilename": path.basename(file),
                     }
                     if (useOCR) {
-                        let text = await ocr(finalFilename)
-                        exifData["DscImg_Tesseract_OCR_Result"] = text
+                        const text = await ocr(finalFilename)
+                        exifData.DscImg_Tesseract_OCR_Result = text
                     }
 
                     await addExifTags(exifData, finalFilename)
