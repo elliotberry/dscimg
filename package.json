@@ -5,7 +5,7 @@
     "license": "The Unlicense",
     "main": "index.js",
     "bin": "./index.js",
-    "version": "0.0.15",
+    "version": "0.0.16",
     "type": "module",
     "scripts": {
         "test": "node index.js ./test.jpg"
