@@ -13,7 +13,7 @@ import { validateAndFormatInput } from "./lib/file-path-argument.js"
 import filterInputs from "./lib/filters.js"
 import getContent from "./lib/get-content.js"
 import ocr from "./lib/tesseract.js"
-
+import ask2 from "./lib/ask2.js"
 const main = async (input, dryrun = false, useXMP = true, useOCR = true) => {
     if (!input) {
         throw new Error("No input files selected")
@@ -50,7 +50,8 @@ const main = async (input, dryrun = false, useXMP = true, useOCR = true) => {
         try {
             const content = await getContent(file)
             const { filename, time, prompt, result } = await ask(content, file)
-
+            let t = await ask2(content, file)
+            console.log(t)
             const newFilename = path.join(path.dirname(file), `${filename}${path.extname(file)}`)
             const finalFilename = await returnSafeFilePath(newFilename)
 
