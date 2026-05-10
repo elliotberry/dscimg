@@ -10,16 +10,31 @@
     "scripts": {
         "test": "node index.js ./test.jpg"
     },
+    "dependencies": {
+        "@napi-rs/xattr": "^1.0.3",
+        "chalk": "^5.6.2",
+        "configuration-station": "^0.0.11",
+        "dotenv": "^17.3.1",
+        "elliotisms": "^0.0.57",
+        "fdir": "^6.5.0",
+        "junk": "^4.0.1",
+        "node-tesseract-ocr": "^2.2.1",
+        "picomatch": "^4.x",
+        "sharp": "^0.34.5",
+        "yargs": "^18.0.0"
+    },
     "devDependencies": {
-        "@stylistic/eslint-plugin-js": "^2.11.0",
-        "eslint": "^9.15.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-perfectionist": "^4.0.3",
-        "eslint-plugin-prettier": "^5.2.1",
+        "@stylistic/eslint-plugin-js": "^4.4.1",
+        "eslint": "^10.1.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-perfectionist": "^5.7.0",
+        "eslint-plugin-prettier": "^5.5.5",
         "eslint-plugin-simple-import-sort": "^12.1.1",
-        "eslint-plugin-unicorn": "^56.0.1",
-        "prettier": "^3.3.3",
-        "release-it": "^17.10.0"
+        "eslint-plugin-unicorn": "^63.0.0",
+        "node-addon-api": "^8.6.0",
+        "node-gyp": "^12.2.0",
+        "prettier": "^3.8.1",
+        "release-it": "^19.2.4"
     },
     "prettier": {
         "arrowParens": "always",
@@ -42,19 +57,6 @@
         "tabWidth": 4,
         "useTabs": false,
         "embeddedLanguageFormatting": "auto"
-    },
-    "dependencies": {
-        "@napi-rs/xattr": "^1.0.1",
-        "chalk": "^5.3.0",
-        "configuration-station": "^0.0.10",
-        "dotenv": "^16.4.5",
-        "elliotisms": "^0.0.51",
-        "fdir": "^6.4.2",
-        "junk": "^4.0.1",
-        "node-tesseract-ocr": "^2.2.1",
-        "picomatch": "^4.x",
-        "sharp": "^0.33.5",
-        "yargs": "^17.7.2"
     },
     "publishConfig": {
         "access": "public",
